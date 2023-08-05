@@ -2,13 +2,15 @@
 	background: #010e01;
 	padding: 15px;
 	text-align: center;
+	border: 5px solid white;
+	border-radius: 20px;
 	}
 	#animation_holder {
 	animation: slideInDown;
 	animation-duration: 1s;
- border: 5px solid white;
+	border: 20px solid transparent;
 	border-radius: 20px;
- padding: 5px;
+	padding: 20px;
 	}
 	#generic {
 	text-align: center;
