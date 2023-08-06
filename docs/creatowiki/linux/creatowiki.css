@@ -1,10 +1,10 @@
 	.linux {
 	color: #f6fef5;
 	font-family: 'Roboto Medium';
-	font-size: 100%;
+	font-size: 200%;
 	font-weight: bold;
 	text-align: center;
-	background: #26c035;
+	background: #ed7802;
 	border-radius: 15px;
 	border: 3px solid White;
 	transition-duration: 0.4s;
@@ -19,7 +19,7 @@
 	height: 100%;
 	}
 	body {
-	background: #010e01;
+	background: #00080f;
 	padding: 15px;
 	text-align: center;
 	border: 5px solid white;
@@ -35,7 +35,7 @@
 	}
 	#generic {
 	text-align: center;
-	background: #17361e;
+	background: #ed7802;
 	border-radius: 15px;
 	border: 3px solid White;
 	padding: 5px;
@@ -53,7 +53,7 @@
 	animation: bounceIn;
 	}
 	#slogan {
-	color: #0ab259;
+	color: #ed7802;
 	font-family: 'Roboto Black';
 	font-size: 200%;
 	font-weight: bold;
@@ -82,22 +82,22 @@
 	}
 
 	#topbar {
-	color: #f6fef5;
+	color: #fc8003;
 	font-family: 'Roboto Black';
 	font-size: 300%;
 	font-weight: bold;
 	text-align: center;
-	background: #17361e;
+	background: #ed7802;
 	padding: 10px;
 	}
 
 	#bottombar {
-	color: #f6fef5;
+	color: #fc8003;
 	font-family: 'Roboto Black';
 	font-size: 150%;
 	font-weight: bold;
 	text-align: center;
-	background: #17361e;
+	background: #ed7802;
 	}
 
 	.buttonmain {
@@ -106,7 +106,7 @@
 	font-size: 200%;
 	font-weight: bold;
 	text-align: center;
-	background: #26c035;
+	background: #ed7802;
 	border-radius: 15px;
 	border: 3px solid White;
 	transition-duration: 0.4s;
@@ -120,7 +120,7 @@
 	font-size: 200%;
 	font-weight: bold;
 	text-align: center;
-	background: #044341;
+	background: #001223;
 	border-radius: 15px;
 	border: 3px solid transparent;
 	box-shadow: 0px 0px;
@@ -132,7 +132,7 @@
 	font-size: 150%;
 	font-weight: bold;
 	text-align: center;
-	background: #26c035;
+	background: #ed7802;
 	border-radius: 15px;
 	border: 3px solid white;
 	transition-duration: 0.4s;
@@ -146,7 +146,7 @@
 	font-size: 150%;
 	font-weight: bold;
 	text-align: center;
-	background: #044341;
+	background: #001223;
 	border-radius: 15px;
 	border: 3px solid transparent;
 	box-shadow: 0px 0px;
