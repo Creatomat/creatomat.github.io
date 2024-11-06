@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Firebase Registration</title>
+  <title>Firebase Text Collector</title>
 </head>
 <body>
-  <h1>Register</h1>
-  <form id="registrationForm">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
+  <h1>Text Collector</h1>
+  <form id="textForm">
+    <label for="text1">Text 1:</label>
+    <input type="text" id="text1" name="text1"><br><br>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
+    <label for="text2">Text 2:</label>
+    <input type="text" id="text2" name="text2"><br><br>
 
-    <button type="submit">Register</button>
+    <button type="button" onclick="submitText()">Submit</button>
   </form>
 
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+
+    function submitText() {
+      const text1 = document.getElementById('text1').value;
+      const text2 = document.getElementById('text2').value;
+
+      const data = {
+        text1: text1,
+        text2: text2
+      };
+
+      database.ref('textData').push(data);
+      alert('Data submitted successfully!');
+    }
+  </script>
 </body>
 </html>
