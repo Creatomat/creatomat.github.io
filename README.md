@@ -2,9 +2,6 @@
 
 This is the alpha version for the new and improved Creatomat website!
 
-- The alpha version of the site is located in the **NEW** folder.
-- The old version of the site is in the **OLD** folder.
-
 I'm contributing to the new website for the Cre8To-Team. For more info about this repo, visit SITE.md.
 
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
