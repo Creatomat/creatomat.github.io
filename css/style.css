@@ -11,6 +11,11 @@ body {
     font-family: 'Jost', sans-serif;
     background: url('../resources/background.png') no-repeat center center fixed;
     background-size: cover;
+body {
+    font-family: 'Jost', sans-serif;
+    background: url('../resources/background.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 200vh;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -21,6 +26,19 @@ body {
 
 h1 {
     /* Main heading style */
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    padding-top: 33vh;
+}
+
+h1 {
     font-weight: 900;
     font-size: 3em;
     margin: 0;
@@ -71,6 +89,7 @@ p {
     border: none;
     border-radius: 2em;
     background: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.25);
     color: #222;
     font-size: 1.2em;
     font-weight: 600;
@@ -82,6 +101,7 @@ p {
 
 .button:hover {
     background: rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.4);
     color: #000;
     box-shadow: 0 6px 32px rgba(0,0,0,0.12);
 }
@@ -201,4 +221,9 @@ p {
         width: 60px;
         height: 60px;
     }
+    position: absolute;
+    top: 90vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
