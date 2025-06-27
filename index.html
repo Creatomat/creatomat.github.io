@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Cre8to-Team</title>
+    <!-- Set favicon for the website -->
     <link rel="icon" type="image/png" href="resources/favicon.png">
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="top-third-align">
-        <h1>Welcome to Cre8to-Team</h1>
-        <h5>This is our official website. Here you can find our projects, and some of our useful resources.</h5>
+    <!-- First section: Welcome message and navigation button -->
+    <div class="page-section" id="1">
+        <div class="first-section-content">
+            <div class="top-third-align">
+                <h1>Welcome to Cre8to-Team</h1>
+                <h5>
+                    This is our official website. Here you can find our projects, and some of our useful resources.
+                </h5>
+            </div>
+        </div>
+        <!-- Button to scroll to the next section -->
+        <a href="#2" class="button bottom-button">Learn More</a>
     </div>
-    <button class="button bottom-button">Learn More</button>
+
+    <!-- Second section: Carousel and placeholder for more content -->
+    <div class="page-section" id="2">
+        <div class="carousel-container">
+            <!-- Carousel navigation buttons -->
+            <button class="carousel-btn left">&#8249;</button>
+            <div class="carousel-track"></div>
+            <button class="carousel-btn right">&#8250;</button>
+        </div>
+        <p style="text-align: center; margin-top: 50px;">
+            More content about our projects will go here!
+        </p>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="js/script.js"></script>
 </body>
 </html>
