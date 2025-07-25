@@ -19,7 +19,7 @@ const items = [
 
     gradient: "linear-gradient(145deg,rgb(11, 105, 255), #000)",
 
-    url: "https://github.com/sarahjohnson"
+    url: "#projects"
 
   },
   {
@@ -69,7 +69,7 @@ function App() {
       </div>
       <div class="w3-animate-opacity w3-display-middle w3-text-white w3-jumbo w3-bold doto" style={{position: 'absolute'}}>
       <SplitText
-      text="Cre8to Team"
+      text="  Cre8to Team  "
       className="text-2xl font-semibold text-center"
       delay={300}
       duration={0.6}
@@ -79,7 +79,8 @@ function App() {
       to={{ opacity: 1, y: 0 }}
       threshold={0.1}
       rootMargin="-100px"
-      textAlign="center" />
+      textAlign="center"
+      style={{zIndex: '5'}} />
       </div>
     </div>  
     <div class="raleway w3-bottombar w3-border-cyan w3-animate-zoom w3-text-white" style={{height: '100%', width: "100%", position: 'relative'}}>
