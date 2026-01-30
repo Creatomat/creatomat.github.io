@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love.exe</title>
+    <style>
+        /* --- Reset & Base --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* --- Desktop Icon --- */
+        .desktop-icon {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 80px;
+            transition: transform 0.1s;
+            z-index: 10;
+        }
+        .desktop-icon:active { transform: scale(0.95); }
+        .icon-img {
+            width: 48px;
+            height: 48px;
+            background: #ff6b81;
+            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #ff4757;
+        }
+        .icon-label {
+            margin-top: 8px;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* --- Window System --- */
+        .window {
+            width: 380px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s;
+            position: relative;
+            z-index: 20;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .window.open {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .controls { display: flex; gap: 6px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+        .dot.close-btn { background: #ff5f57; cursor: pointer; }
+        .dot.min-btn { background: #ffbd2e; }
+        .dot.max-btn { background: #28c940; }
+
+        /* Window Content */
+        .content {
+            padding: 30px;
+            min-height: 380px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* --- Screen 1: Login --- */
+        #screen-login {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+            position: absolute; 
+            z-index: 10;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: #eee;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #ff9a9e;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .username {
+            font-size: 24px;
+            color: #444;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        .btn {
+            background: #ff6b81;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #ff4757;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 129, 0.4);
+        }
+        .btn:active { transform: translateY(0); }
+
+        /* --- Screen 2: Sequence Container --- */
+        #screen-question {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Icon Wrapper */
+        .icon-stage {
+            width: 150px;
+            height: 130px;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Broken Heart Styling */
+        .heart-piece {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            fill: #ff4757;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), filter 0.5s, opacity 0.5s;
+        }
+        .piece-left {
+            clip-path: polygon(0% 0%, 50% 0%, 40% 40%, 50% 100%, 0% 100%);
+            transform: translate(-20px, -10px) rotate(-15deg);
+        }
+        .piece-right {
+            clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 60% 40%);
+            transform: translate(25px, -15px) rotate(15deg);
+        }
+        
+        /* Full Rainbow Heart (Hidden initially) */
+        .heart-full {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .heart-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+
+        /* Heart Healed State */
+        .icon-stage.healed .piece-left,
+        .icon-stage.healed .piece-right { 
+            opacity: 0; /* Hide broken pieces */
+            transform: translate(0, 0) rotate(0) scale(0.9);
+        }
+        .icon-stage.healed .heart-full {
+            opacity: 1;
+            transform: scale(1);
+            filter: drop-shadow(0 0 15px rgba(255, 100, 150, 0.6));
+            animation: heartbeat 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Stapler Styling */
+        .stapler-svg {
+            width: 100px;
+            height: 100px;
+            display: none;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            stroke: #a4b0be;
+            stroke-width: 12;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* Calendar Styling */
+        .calendar-svg {
+            width: 100px;
+            height: 100px;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        /* --- Slideshow Container --- */
+        .slides-container {
+            width: 100%;
+            height: 120px; /* Fixed height to contain text+btn */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+            opacity: 0;
+            transform: translateX(100%); /* Start off-screen right */
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100%); /* Exit to left */
+        }
+
+        .question-text {
+            font-size: 20px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        /* --- Global Helper Classes --- */
+        .hidden { display: none !important; }
+        .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        
+        .show-stapler .piece-left, .show-stapler .piece-right, .show-stapler .heart-full { display: none; }
+        .show-stapler .stapler-svg { display: block; opacity: 1; transform: scale(1); }
+        
+        .show-calendar .stapler-svg { opacity: 0; transform: translateY(-20px); }
+        .show-calendar .calendar-svg { display: block; opacity: 1; transform: translateY(0); }
+
+        /* --- Confetti Canvas --- */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- Gradient Definition for Rainbow Heart -->
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#ff0000;stop-opacity:1" />
+                <stop offset="16%" style="stop-color:#ff7f00;stop-opacity:1" />
+                <stop offset="33%" style="stop-color:#ffff00;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#00ff00;stop-opacity:1" />
+                <stop offset="66%" style="stop-color:#0000ff;stop-opacity:1" />
+                <stop offset="83%" style="stop-color:#4b0082;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#9400d3;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Desktop Environment -->
+    <!-- ADDED ID HERE, REMOVED ONCLICK -->
+    <div class="desktop-icon" id="desktopIcon">
+        <div class="icon-img"></div>
+        <div class="icon-label">love.exe</div>
+    </div>
+
+    <!-- The Application Window -->
+    <div class="window" id="app">
+        <div class="title-bar">
+            <span>love.exe</span>
+            <div class="controls">
+                <!-- Added IDs to buttons for safer JS binding -->
+                <div class="dot min-btn"></div>
+                <div class="dot max-btn"></div>
+                <div class="dot close-btn" id="closeBtn"></div>
+            </div>
+        </div>
+        
+        <div class="content">
+            
+            <!-- Screen 1: Login -->
+            <div id="screen-login">
+                <div class="avatar">
+                    <svg viewBox="0 0 100 100" width="100%" height="100%">
+                        <rect width="100" height="100" fill="#f8f9fa"/>
+                        <circle cx="50" cy="40" r="25" fill="#ffccd5"/>
+                        <path d="M10 100 Q 50 50 90 100" fill="#a2d2ff"/>
+                    </svg>
+                </div>
+                <div class="username">Dawn</div>
+                <button class="btn" id="loginBtn">Login</button>
+            </div>
+
+            <!-- Screen 2: The Main Sequence -->
+            <div id="screen-question">
+                
+                <!-- Icon Stage: Handles Heart, Stapler, Calendar -->
+                <div class="icon-stage" id="iconStage">
+                    
+                    <!-- 1. Broken Heart Pieces -->
+                    <div class="heart-piece piece-left">
+                        <svg class="heart-svg" viewBox="0 0 32 29.6">
+                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                        </svg>
+                    </div>
+                    <div class="heart-piece piece-right">
+                        <svg class="heart-svg" viewBox="0 0 32 29.6">
+                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                        </svg>
+                    </div>
+
+                    <!-- 1b. Full Rainbow Heart (Fades in) -->
+                    <div class="heart-full">
+                        <svg class="heart-svg" viewBox="0 0 32 29.6">
+                            <path fill="url(#rainbowGradient)" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                        </svg>
+                    </div>
+
+                    <!-- 2. Stapler Pin -->
+                    <svg class="stapler-svg" viewBox="0 0 100 100">
+                        <!-- U shape staple -->
+                        <path d="M25 60 V 30 A 5 5 0 0 1 75 30 V 60" />
+                    </svg>
+
+                    <!-- 3. Calendar Icon -->
+                    <svg class="calendar-svg" viewBox="0 0 100 100">
+                        <rect x="15" y="20" width="70" height="70" rx="10" fill="#fff" stroke="#ff6b81" stroke-width="4"/>
+                        <line x1="15" y1="40" x2="85" y2="40" stroke="#ff6b81" stroke-width="4"/>
+                        <line x1="30" y1="10" x2="30" y2="25" stroke="#ff6b81" stroke-width="4"/>
+                        <line x1="70" y1="10" x2="70" y2="25" stroke="#ff6b81" stroke-width="4"/>
+                        <text x="50" y="75" font-family="Arial, sans-serif" font-size="30" fill="#ff6b81" text-anchor="middle" font-weight="bold">14</text>
+                    </svg>
+
+                </div>
+                
+                <!-- Slideshow Container -->
+                <div class="slides-container">
+                    
+                    <!-- Slide 1 -->
+                    <div class="slide active" id="slide1">
+                        <h2 class="question-text">Will you be my valentine?</h2>
+                        <button class="btn" id="btnYes" style="background:#28c940;">YES</button>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="slide" id="slide2">
+                        <h2 class="question-text">I have a gift for you</h2>
+                        <button class="btn" id="btnWhat" style="background:#70a1ff;">what?</button>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="slide" id="slide3">
+                        <h2 class="question-text">hello!</h2>
+                        <button class="btn" id="btnAccept" style="background:#2ed573;">accept</button>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="slide" id="slide4">
+                        <h2 class="question-text">See you on the 14th</h2>
+                        <button class="btn" id="btnYay" style="background:#ff4757;">yay!</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+        // Wait for the DOM to be fully loaded before running script
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Elements ---
+            const appWindow = document.getElementById('app');
+            const desktopIcon = document.getElementById('desktopIcon');
+            const closeBtn = document.getElementById('closeBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            const screenLogin = document.getElementById('screen-login');
+            const screenQuestion = document.getElementById('screen-question');
+            const iconStage = document.getElementById('iconStage');
+            
+            // Buttons for slides
+            const btnYes = document.getElementById('btnYes');
+            const btnWhat = document.getElementById('btnWhat');
+            const btnAccept = document.getElementById('btnAccept');
+            const btnYay = document.getElementById('btnYay');
+
+            // Slides
+            const slides = {
+                1: document.getElementById('slide1'),
+                2: document.getElementById('slide2'),
+                3: document.getElementById('slide3'),
+                4: document.getElementById('slide4')
+            };
+
+            // --- Event Listeners ---
+            
+            // Open App
+            desktopIcon.addEventListener('click', () => {
+                appWindow.classList.add('open');
+            });
+
+            // Close App
+            closeBtn.addEventListener('click', () => {
+                appWindow.classList.remove('open');
+                setTimeout(() => {
+                    location.reload(); 
+                }, 500);
+            });
+
+            // Login
+            loginBtn.addEventListener('click', () => {
+                screenLogin.classList.add('fade-out');
+                setTimeout(() => {
+                    screenLogin.style.display = 'none';
+                    screenQuestion.style.display = 'flex'; 
+                }, 500);
+            });
+
+            // Sequence Buttons
+            btnYes.addEventListener('click', acceptValentine);
+            btnWhat.addEventListener('click', showStapler);
+            btnAccept.addEventListener('click', showCalendar);
+            btnYay.addEventListener('click', finishApp);
+
+
+            // --- Logic Functions ---
+
+            // Helper for Slideshow Transition
+            function transitionSlide(currentId, nextId) {
+                const currentSlide = slides[currentId];
+                const nextSlide = slides[nextId];
+
+                // Move current to left
+                currentSlide.classList.remove('active');
+                currentSlide.classList.add('prev');
+
+                // Move next in from right
+                nextSlide.classList.add('active');
+                
+                setTimeout(() => {
+                    currentSlide.classList.remove('prev');
+                }, 600);
+            }
+
+            // Step 1: Clicked "YES"
+            function acceptValentine() {
+                iconStage.classList.add('healed');
+                startConfetti();
+                transitionSlide(1, 2);
+            }
+
+            // Step 2: Clicked "what?" -> Show Stapler
+            function showStapler() {
+                iconStage.classList.add('show-stapler');
+                transitionSlide(2, 3);
+            }
+
+            // Step 3: Clicked "accept" -> Show Calendar
+            function showCalendar() {
+                iconStage.classList.add('show-calendar');
+                transitionSlide(3, 4);
+            }
+
+            // Step 4: Clicked "yay!"
+            function finishApp() {
+                btnYay.style.transform = "scale(1.2)";
+                setTimeout(() => {
+                    btnYay.style.transform = "scale(1)";
+                    startConfetti();
+                }, 200);
+            }
+
+            // --- Confetti Engine ---
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            let confettiActive = false;
+            let isSpawning = false;
+            let particles = [];
+            let animationId;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = -10;
+                    this.size = Math.random() * 10 + 5;
+                    this.speedY = Math.random() * 3 + 2;
+                    this.speedX = Math.random() * 4 - 2;
+                    this.color = ['#ff4757', '#2ed573', '#eccc68', '#70a1ff', '#ff6b81'][Math.floor(Math.random() * 5)];
+                    this.rotation = Math.random() * 360;
+                    this.rotationSpeed = Math.random() * 10 - 5;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += this.rotationSpeed;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation * Math.PI / 180);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(0, 0, this.size, this.size);
+                    ctx.restore();
+                }
+            }
+
+            function startConfetti() {
+                if(confettiActive && isSpawning) return;
+                
+                confettiActive = true;
+                isSpawning = true;
+                
+                if (particles.length === 0) {
+                    loop();
+                }
+                
+                setTimeout(() => {
+                    isSpawning = false;
+                }, 2000);
+            }
+
+            function loop() {
+                if (!confettiActive && particles.length === 0) return;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if (isSpawning && particles.length < 150) {
+                    particles.push(new Particle());
+                }
+
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+
+                    if (particles[i].y > canvas.height) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+                
+                if (particles.length > 0 || isSpawning) {
+                    animationId = requestAnimationFrame(loop);
+                } else {
+                    confettiActive = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
