@@ -18,11 +18,9 @@
             position: relative;
         }
 
-        /* --- Desktop Icon --- */
+        /* --- Desktop Icons --- */
         .desktop-icon {
             position: absolute;
-            top: 50px;
-            left: 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,6 +30,12 @@
             z-index: 10;
         }
         .desktop-icon:active { transform: scale(0.95); }
+
+        /* Icon 1: Love.exe */
+        #icon-love {
+            top: 50px;
+            left: 50px;
+        }
         .icon-img {
             width: 48px;
             height: 48px;
@@ -50,6 +54,38 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.4);
             font-size: 14px;
             font-weight: 500;
+        }
+
+        /* Icon 2: Sticky Note (Does nothing) */
+        #icon-note {
+            top: 150px;
+            left: 50px;
+            cursor: default; /* Indicates it doesn't do anything */
+        }
+        .note-img {
+            width: 50px;
+            height: 50px;
+            background: #fef68a; /* Yellow note color */
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            color: #ef4444; /* Red marker color */
+            font-weight: bold;
+            font-size: 14px;
+            transform: rotate(-5deg);
+        }
+        /* Folded corner effect */
+        .note-img::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border-width: 0 0 10px 10px;
+            border-style: solid;
+            border-color: transparent #fde047 transparent transparent; /* Slightly darker yellow */
+            box-shadow: -2px -2px 2px rgba(0,0,0,0.1);
         }
 
         /* --- Window System --- */
@@ -94,14 +130,14 @@
         /* Window Content */
         .content {
             padding: 30px;
-            min-height: 380px; 
+            min-height: 380px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
             position: relative;
-            overflow: hidden; 
+            overflow: hidden;
         }
 
         /* --- Screen 1: Login --- */
@@ -111,7 +147,7 @@
             flex-direction: column;
             align-items: center;
             animation: fadeIn 0.5s ease;
-            position: absolute; 
+            position: absolute;
             z-index: 10;
         }
         .avatar {
@@ -178,7 +214,8 @@
             width: 100%;
             height: 100%;
             fill: #ff4757;
-            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), filter 0.5s, opacity 0.5s;
+            /* Transition for closing: Move first, then fade out */
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease 0.8s;
         }
         .piece-left {
             clip-path: polygon(0% 0%, 50% 0%, 40% 40%, 50% 100%, 0% 100%);
@@ -188,29 +225,32 @@
             clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 60% 40%);
             transform: translate(25px, -15px) rotate(15deg);
         }
-        
+
         /* Full Rainbow Heart (Hidden initially) */
         .heart-full {
             position: absolute;
             width: 100%;
             height: 100%;
             opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.95);
+            /* Fade in AFTER pieces have closed */
+            transition: opacity 0.8s ease 0.8s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s;
         }
         .heart-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
 
-        /* Heart Healed State */
+        /* Heart Healed State (Morphing) */
         .icon-stage.healed .piece-left,
-        .icon-stage.healed .piece-right { 
-            opacity: 0; /* Hide broken pieces */
-            transform: translate(0, 0) rotate(0) scale(0.9);
+        .icon-stage.healed .piece-right {
+            /* Move to center (Close) */
+            transform: translate(0, 0) rotate(0) scale(1);
+            /* Then opacity triggers due to delay in transition property */
+            opacity: 0;
         }
         .icon-stage.healed .heart-full {
             opacity: 1;
             transform: scale(1);
             filter: drop-shadow(0 0 15px rgba(255, 100, 150, 0.6));
-            animation: heartbeat 1.5s infinite ease-in-out;
+            animation: heartbeat 1.5s infinite ease-in-out 1.6s; /* Start beating after morph */
         }
 
         @keyframes heartbeat {
@@ -218,7 +258,17 @@
             50% { transform: scale(1.05); }
         }
 
-        /* Stapler Styling */
+        /* Gift Box Styling */
+        .gift-svg {
+            width: 100px;
+            height: 100px;
+            display: none;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Stapler Pin Styling */
         .stapler-svg {
             width: 100px;
             height: 100px;
@@ -242,10 +292,54 @@
             transition: all 0.5s ease;
         }
 
+        /* --- Taped Button Styling --- */
+        .no-btn-wrapper {
+            position: relative;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tape-strip {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            background: rgba(255, 255, 230, 0.9);
+            color: #ff4757;
+            padding: 4px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0,0,0,0.1);
+            width: 140%;
+            text-align: center;
+            pointer-events: none;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            z-index: 5;
+        }
+
+        /* Jagged edges for tape effect using pseudo elements */
+        .tape-strip::before, .tape-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: inherit;
+            border: inherit;
+            border-left: none;
+            border-right: none;
+        }
+        .tape-strip::before { left: -4px; border-left: 1px dashed rgba(0,0,0,0.2); border-radius: 2px 0 0 2px; }
+        .tape-strip::after { right: -4px; border-right: 1px dashed rgba(0,0,0,0.2); border-radius: 0 2px 2px 0; }
+
         /* --- Slideshow Container --- */
         .slides-container {
             width: 100%;
-            height: 120px; /* Fixed height to contain text+btn */
+            height: 240px; /* Increased height to fit both buttons */
             position: relative;
             overflow: hidden;
             display: flex;
@@ -285,11 +379,40 @@
         /* --- Global Helper Classes --- */
         .hidden { display: none !important; }
         .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        
-        .show-stapler .piece-left, .show-stapler .piece-right, .show-stapler .heart-full { display: none; }
-        .show-stapler .stapler-svg { display: block; opacity: 1; transform: scale(1); }
-        
-        .show-calendar .stapler-svg { opacity: 0; transform: translateY(-20px); }
+
+        /* Reveal State: Present Gift Box */
+        .present-gift .piece-left,
+        .present-gift .piece-right,
+        .present-gift .heart-full {
+            display: none;
+        }
+        .present-gift .gift-svg {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Reveal State: Open Gift (Show Stapler Pin) */
+        .open-gift .piece-left,
+        .open-gift .piece-right,
+        .open-gift .heart-full,
+        .open-gift .gift-svg {
+            display: none;
+        }
+        .open-gift .stapler-svg {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Reveal State: Show Calendar */
+        .show-calendar .piece-left,
+        .show-calendar .piece-right,
+        .show-calendar .heart-full,
+        .show-calendar .gift-svg,
+        .show-calendar .stapler-svg { /* Hide gift items */
+            display: none;
+        }
         .show-calendar .calendar-svg { display: block; opacity: 1; transform: translateY(0); }
 
         /* --- Confetti Canvas --- */
@@ -325,10 +448,17 @@
     </svg>
 
     <!-- Desktop Environment -->
-    <!-- ADDED ID HERE, REMOVED ONCLICK -->
-    <div class="desktop-icon" id="desktopIcon">
+
+    <!-- Icon 1: Application -->
+    <div class="desktop-icon" id="icon-love">
         <div class="icon-img"></div>
         <div class="icon-label">love.exe</div>
+    </div>
+
+    <!-- Icon 2: Sticky Note (Static) -->
+    <div class="desktop-icon" id="icon-note">
+        <div class="note-img">hello</div>
+        <!-- No label, note itself has text -->
     </div>
 
     <!-- The Application Window -->
@@ -336,22 +466,31 @@
         <div class="title-bar">
             <span>love.exe</span>
             <div class="controls">
-                <!-- Added IDs to buttons for safer JS binding -->
                 <div class="dot min-btn"></div>
                 <div class="dot max-btn"></div>
                 <div class="dot close-btn" id="closeBtn"></div>
             </div>
         </div>
-        
+
         <div class="content">
-            
+
             <!-- Screen 1: Login -->
             <div id="screen-login">
                 <div class="avatar">
                     <svg viewBox="0 0 100 100" width="100%" height="100%">
-                        <rect width="100" height="100" fill="#f8f9fa"/>
-                        <circle cx="50" cy="40" r="25" fill="#ffccd5"/>
-                        <path d="M10 100 Q 50 50 90 100" fill="#a2d2ff"/>
+                        <rect width="100" height="100" fill="#0f172a"/>
+                        <!-- Main Star -->
+                        <path d="M50 25 L54 37 L66 37 L57 44 L60 56 L50 49 L40 56 L43 44 L34 37 L46 37 Z" fill="#fcd34d" />
+                        <!-- Scattered Stars -->
+                        <circle cx="20" cy="30" r="2" fill="#fff" opacity="0.8"/>
+                        <circle cx="85" cy="25" r="3" fill="#fde047" opacity="0.9"/>
+                        <circle cx="25" cy="75" r="2" fill="#fff" opacity="0.6"/>
+                        <circle cx="75" cy="80" r="4" fill="#fbbf24"/>
+                        <circle cx="50" cy="75" r="1.5" fill="#fff" opacity="0.5"/>
+                        <circle cx="90" cy="55" r="2" fill="#fff" opacity="0.7"/>
+                        <circle cx="10" cy="55" r="2.5" fill="#fcd34d"/>
+                        <!-- Small twinkling star -->
+                        <path d="M75 45 L76 48 L79 48 L77 50 L78 53 L75 51 L72 53 L73 50 L71 48 L74 48 Z" fill="#fff" />
                     </svg>
                 </div>
                 <div class="username">Dawn</div>
@@ -360,10 +499,10 @@
 
             <!-- Screen 2: The Main Sequence -->
             <div id="screen-question">
-                
-                <!-- Icon Stage: Handles Heart, Stapler, Calendar -->
+
+                <!-- Icon Stage: Handles Heart, Gift, Stapler & Calendar -->
                 <div class="icon-stage" id="iconStage">
-                    
+
                     <!-- 1. Broken Heart Pieces -->
                     <div class="heart-piece piece-left">
                         <svg class="heart-svg" viewBox="0 0 32 29.6">
@@ -386,7 +525,16 @@
                         </svg>
                     </div>
 
-                    <!-- 2. Stapler Pin -->
+                    <!-- 2. Gift Box SVG -->
+                    <svg class="gift-svg" viewBox="0 0 100 100">
+                        <rect x="20" y="40" width="60" height="50" rx="4" fill="#ff6b81" />
+                        <rect x="15" y="25" width="70" height="15" rx="2" fill="#ff4757" />
+                        <rect x="45" y="25" width="10" height="65" fill="#f8f9fa" />
+                        <path d="M50 25 C 50 25 30 5 20 25 C 15 35 45 30 50 25" fill="none" stroke="#f8f9fa" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M50 25 C 50 25 70 5 80 25 C 85 35 55 30 50 25" fill="none" stroke="#f8f9fa" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+
+                    <!-- 2b. Stapler Pin SVG (Inside Gift) -->
                     <svg class="stapler-svg" viewBox="0 0 100 100">
                         <!-- U shape staple -->
                         <path d="M25 60 V 30 A 5 5 0 0 1 75 30 V 60" />
@@ -402,32 +550,45 @@
                     </svg>
 
                 </div>
-                
+
                 <!-- Slideshow Container -->
                 <div class="slides-container">
-                    
-                    <!-- Slide 1 -->
+
+                    <!-- Slide 1: Question -->
                     <div class="slide active" id="slide1">
                         <h2 class="question-text">Will you be my valentine?</h2>
                         <button class="btn" id="btnYes" style="background:#28c940;">YES</button>
+
+                        <!-- Taped off NO button -->
+                        <div class="no-btn-wrapper">
+                            <button class="btn" style="background:#ff4757; cursor: not-allowed; opacity: 0.8; box-shadow: none; transform: none;">NO</button>
+                            <div class="tape-strip">OUT OF ORDER</div>
+                        </div>
+                        <div style="font-size: 11px; color: #888; margin-top: 10px; font-style: italic;">(still working on the no button)</div>
                     </div>
 
-                    <!-- Slide 2 -->
+                    <!-- Slide 2: YAY with Rainbow Heart -->
                     <div class="slide" id="slide2">
-                        <h2 class="question-text">I have a gift for you</h2>
-                        <button class="btn" id="btnWhat" style="background:#70a1ff;">what?</button>
+                        <h2 class="question-text">YAY!</h2>
+                        <button class="btn" id="btnYayNext" style="background:#ff6b81;">yay</button>
                     </div>
 
-                    <!-- Slide 3 -->
+                    <!-- Slide 3: Gift Offer -->
                     <div class="slide" id="slide3">
-                        <h2 class="question-text">hello!</h2>
-                        <button class="btn" id="btnAccept" style="background:#2ed573;">accept</button>
+                        <h2 class="question-text">I have a gift for you</h2>
+                        <button class="btn" id="btnOpenGift" style="background:#70a1ff;">open it</button>
                     </div>
 
-                    <!-- Slide 4 -->
+                    <!-- Slide 4: Hope you like it -->
                     <div class="slide" id="slide4">
-                        <h2 class="question-text">See you on the 14th</h2>
-                        <button class="btn" id="btnYay" style="background:#ff4757;">yay!</button>
+                        <h2 class="question-text">Hope you like it, it's a stapler pin!</h2>
+                        <button class="btn" id="btnIDo" style="background:#2ed573;">i do</button>
+                    </div>
+
+                    <!-- Slide 5: Final Reveal -->
+                    <div class="slide" id="slide5">
+                        <h2 class="question-text">Visit again on the 14th</h2>
+                        <button class="btn" id="btnFinish" style="background:#ff4757;">&lt;3</button>
                     </div>
 
                 </div>
@@ -440,37 +601,38 @@
     <canvas id="confetti-canvas"></canvas>
 
     <script>
-        // Wait for the DOM to be fully loaded before running script
         document.addEventListener('DOMContentLoaded', () => {
-            
+
             // --- Elements ---
             const appWindow = document.getElementById('app');
-            const desktopIcon = document.getElementById('desktopIcon');
+            const iconLove = document.getElementById('icon-love');
             const closeBtn = document.getElementById('closeBtn');
             const loginBtn = document.getElementById('loginBtn');
-            
+
             const screenLogin = document.getElementById('screen-login');
             const screenQuestion = document.getElementById('screen-question');
             const iconStage = document.getElementById('iconStage');
-            
-            // Buttons for slides
+
+            // Buttons
             const btnYes = document.getElementById('btnYes');
-            const btnWhat = document.getElementById('btnWhat');
-            const btnAccept = document.getElementById('btnAccept');
-            const btnYay = document.getElementById('btnYay');
+            const btnYayNext = document.getElementById('btnYayNext');
+            const btnOpenGift = document.getElementById('btnOpenGift');
+            const btnIDo = document.getElementById('btnIDo');
+            const btnFinish = document.getElementById('btnFinish');
 
             // Slides
             const slides = {
                 1: document.getElementById('slide1'),
                 2: document.getElementById('slide2'),
                 3: document.getElementById('slide3'),
-                4: document.getElementById('slide4')
+                4: document.getElementById('slide4'),
+                5: document.getElementById('slide5')
             };
 
             // --- Event Listeners ---
-            
+
             // Open App
-            desktopIcon.addEventListener('click', () => {
+            iconLove.addEventListener('click', () => {
                 appWindow.classList.add('open');
             });
 
@@ -478,7 +640,7 @@
             closeBtn.addEventListener('click', () => {
                 appWindow.classList.remove('open');
                 setTimeout(() => {
-                    location.reload(); 
+                    location.reload();
                 }, 500);
             });
 
@@ -487,60 +649,67 @@
                 screenLogin.classList.add('fade-out');
                 setTimeout(() => {
                     screenLogin.style.display = 'none';
-                    screenQuestion.style.display = 'flex'; 
+                    screenQuestion.style.display = 'flex';
                 }, 500);
             });
 
-            // Sequence Buttons
+            // Sequence
             btnYes.addEventListener('click', acceptValentine);
-            btnWhat.addEventListener('click', showStapler);
-            btnAccept.addEventListener('click', showCalendar);
-            btnYay.addEventListener('click', finishApp);
+            btnYayNext.addEventListener('click', goToGift);
+            btnOpenGift.addEventListener('click', revealGift);
+            btnIDo.addEventListener('click', finishLike);
+            btnFinish.addEventListener('click', finishApp);
 
 
             // --- Logic Functions ---
 
-            // Helper for Slideshow Transition
             function transitionSlide(currentId, nextId) {
                 const currentSlide = slides[currentId];
                 const nextSlide = slides[nextId];
 
-                // Move current to left
                 currentSlide.classList.remove('active');
                 currentSlide.classList.add('prev');
 
-                // Move next in from right
                 nextSlide.classList.add('active');
-                
+
                 setTimeout(() => {
                     currentSlide.classList.remove('prev');
                 }, 600);
             }
 
-            // Step 1: Clicked "YES"
+            // Step 1: Clicked "YES" -> Morph Heart (Close then Fade), show Yay text
             function acceptValentine() {
                 iconStage.classList.add('healed');
                 startConfetti();
                 transitionSlide(1, 2);
             }
 
-            // Step 2: Clicked "what?" -> Show Stapler
-            function showStapler() {
-                iconStage.classList.add('show-stapler');
+            // Step 2: Clicked "yay" -> Move to gift text, Hide Heart, Show Gift Box
+            function goToGift() {
+                iconStage.classList.add('present-gift');
                 transitionSlide(2, 3);
             }
 
-            // Step 3: Clicked "accept" -> Show Calendar
-            function showCalendar() {
-                iconStage.classList.add('show-calendar');
+            // Step 3: Clicked "open it" -> Hide Gift Box, Show Stapler Pin, Show "Hope you like it"
+            function revealGift() {
+                iconStage.classList.remove('present-gift');
+                iconStage.classList.add('open-gift');
                 transitionSlide(3, 4);
+                startConfetti();
             }
 
-            // Step 4: Clicked "yay!"
+            // Step 4: Clicked "i do" -> Hide Stapler, Show Calendar
+            function finishLike() {
+                iconStage.classList.remove('open-gift');
+                iconStage.classList.add('show-calendar');
+                transitionSlide(4, 5);
+            }
+
+            // Step 5: Clicked "<3" -> Close
             function finishApp() {
-                btnYay.style.transform = "scale(1.2)";
+                btnFinish.style.transform = "scale(1.2)";
                 setTimeout(() => {
-                    btnYay.style.transform = "scale(1)";
+                    btnFinish.style.transform = "scale(1)";
                     startConfetti();
                 }, 200);
             }
@@ -588,14 +757,14 @@
 
             function startConfetti() {
                 if(confettiActive && isSpawning) return;
-                
+
                 confettiActive = true;
                 isSpawning = true;
-                
+
                 if (particles.length === 0) {
                     loop();
                 }
-                
+
                 setTimeout(() => {
                     isSpawning = false;
                 }, 2000);
@@ -603,9 +772,9 @@
 
             function loop() {
                 if (!confettiActive && particles.length === 0) return;
-                
+
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
+
                 if (isSpawning && particles.length < 150) {
                     particles.push(new Particle());
                 }
@@ -619,7 +788,7 @@
                         i--;
                     }
                 }
-                
+
                 if (particles.length > 0 || isSpawning) {
                     animationId = requestAnimationFrame(loop);
                 } else {
@@ -630,5 +799,3 @@
     </script>
 </body>
 </html>
-
-
