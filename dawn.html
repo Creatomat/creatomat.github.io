@@ -31,32 +31,21 @@
         }
         .desktop-icon:active { transform: scale(0.95); }
 
-        /* Icon 1: Love.exe */
-        #icon-love {
-            top: 50px;
-            left: 50px;
-        }
+        /* App Icon */
+        #icon-love { top: 50px; left: 50px; }
         .icon-img {
             width: 48px;
             height: 48px;
             background: #ff6b81;
             mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
             -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
-            mask-size: contain;
-            -webkit-mask-size: contain;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             background-color: #ff4757;
         }
-        .icon-label {
-            margin-top: 8px;
-            color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            font-size: 14px;
-            font-weight: 500;
-        }
+        .icon-label { margin-top: 8px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.4); font-size: 14px; font-weight: 500; }
 
-        /* Icon 2: Sticky Note (Does nothing) */
+        /* Sticky Note Icon */
         #icon-note {
             top: 150px;
             left: 50px;
@@ -75,6 +64,7 @@
             font-weight: bold;
             font-size: 14px;
             transform: rotate(-5deg);
+            position: relative;
         }
         /* Folded corner effect */
         .note-img::after {
@@ -103,13 +93,14 @@
             z-index: 20;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.5);
+            pointer-events: none; /* FIX: Don't block clicks when closed */
         }
         .window.open {
             transform: scale(1);
             opacity: 1;
+            pointer-events: auto; /* Re-enable clicks when open */
         }
 
-        /* Title Bar */
         .title-bar {
             background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             padding: 10px 15px;
@@ -119,18 +110,14 @@
             border-bottom: 1px solid #eee;
             color: white;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
         .controls { display: flex; gap: 6px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); }
         .dot.close-btn { background: #ff5f57; cursor: pointer; }
-        .dot.min-btn { background: #ffbd2e; }
-        .dot.max-btn { background: #28c940; }
 
-        /* Window Content */
         .content {
             padding: 30px;
-            min-height: 380px;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -140,7 +127,7 @@
             overflow: hidden;
         }
 
-        /* --- Screen 1: Login --- */
+        /* --- Screens --- */
         #screen-login {
             width: 100%;
             display: flex;
@@ -153,20 +140,15 @@
         .avatar {
             width: 100px;
             height: 100px;
-            background: #eee;
+            background: #a2d2ff;
             border-radius: 50%;
             margin-bottom: 15px;
             position: relative;
             overflow: hidden;
             border: 3px solid #ff9a9e;
         }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .username {
-            font-size: 24px;
-            color: #444;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
+        .username { font-size: 24px; color: #444; margin-bottom: 25px; font-weight: 600; }
+
         .btn {
             background: #ff6b81;
             color: white;
@@ -179,15 +161,12 @@
             box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
             margin-top: 10px;
         }
-        .btn:hover {
-            background: #ff4757;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 107, 129, 0.4);
-        }
+        .btn:hover { transform: translateY(-2px); }
         .btn:active { transform: translateY(0); }
 
-        /* --- Screen 2: Sequence Container --- */
-        #screen-question {
+        .hidden { display: none !important; }
+
+        #screen-main {
             display: none;
             width: 100%;
             height: 100%;
@@ -196,152 +175,73 @@
             justify-content: center;
         }
 
-        /* Icon Wrapper */
+        /* --- Icon Stage --- */
         .icon-stage {
-            width: 150px;
-            height: 130px;
+            width: 200px; /* Slightly wider for labels */
+            height: 160px;
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        /* Broken Heart Styling */
-        .heart-piece {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            fill: #ff4757;
-            /* Transition for closing: Move first, then fade out */
-            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease 0.8s;
-        }
-        .piece-left {
-            clip-path: polygon(0% 0%, 50% 0%, 40% 40%, 50% 100%, 0% 100%);
-            transform: translate(-20px, -10px) rotate(-15deg);
-        }
-        .piece-right {
-            clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 60% 40%);
-            transform: translate(25px, -15px) rotate(15deg);
-        }
-
-        /* Full Rainbow Heart (Hidden initially) */
-        .heart-full {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        /* Gift Box */
+        .gift-svg { width: 100px; height: 100px; display: none; transform: scale(0); transition: transform 0.5s; }
+        
+        /* RAM Stick */
+        .ram-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
             opacity: 0;
-            transform: scale(0.95);
-            /* Fade in AFTER pieces have closed */
-            transition: opacity 0.8s ease 0.8s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s;
+            transform: translateY(20px) rotate(-5deg);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .heart-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-
-        /* Heart Healed State (Morphing) */
-        .icon-stage.healed .piece-left,
-        .icon-stage.healed .piece-right {
-            /* Move to center (Close) */
-            transform: translate(0, 0) rotate(0) scale(1);
-            /* Then opacity triggers due to delay in transition property */
-            opacity: 0;
-        }
-        .icon-stage.healed .heart-full {
-            opacity: 1;
-            transform: scale(1);
-            filter: drop-shadow(0 0 15px rgba(255, 100, 150, 0.6));
-            animation: heartbeat 1.5s infinite ease-in-out 1.6s; /* Start beating after morph */
+        .ram-svg { width: 140px; height: 80px; }
+        .ram-label {
+            margin-top: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: #555;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
 
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Gift Box Styling */
-        .gift-svg {
+        /* Infinity Icon */
+        .infinity-svg {
             width: 100px;
-            height: 100px;
+            height: 60px;
             display: none;
             opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Stapler Pin Styling */
-        .stapler-svg {
-            width: 100px;
-            height: 100px;
-            display: none;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            stroke: #a4b0be;
-            stroke-width: 12;
+            stroke: #ff6b81;
+            stroke-width: 8;
             fill: none;
             stroke-linecap: round;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300; /* Hidden line */
+            transition: stroke-dashoffset 2s ease, filter 0.5s;
         }
 
-        /* Calendar Styling */
-        .calendar-svg {
+        /* Envelope */
+        .envelope-svg {
             width: 100px;
             height: 100px;
             display: none;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+            transform: scale(0.5);
+            transition: all 0.5s;
         }
 
-        /* --- Taped Button Styling --- */
-        .no-btn-wrapper {
-            position: relative;
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .tape-strip {
-            position: absolute;
-            top: 65%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            background: rgba(255, 255, 230, 0.9);
-            color: #ff4757;
-            padding: 4px 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            border: 1px solid rgba(0,0,0,0.1);
-            width: 140%;
-            text-align: center;
-            pointer-events: none;
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-            z-index: 5;
-        }
-
-        /* Jagged edges for tape effect using pseudo elements */
-        .tape-strip::before, .tape-strip::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 5px;
-            background: inherit;
-            border: inherit;
-            border-left: none;
-            border-right: none;
-        }
-        .tape-strip::before { left: -4px; border-left: 1px dashed rgba(0,0,0,0.2); border-radius: 2px 0 0 2px; }
-        .tape-strip::after { right: -4px; border-right: 1px dashed rgba(0,0,0,0.2); border-radius: 0 2px 2px 0; }
-
-        /* --- Slideshow Container --- */
+        /* --- Slideshow --- */
         .slides-container {
             width: 100%;
-            height: 240px; /* Increased height to fit both buttons */
+            height: 160px;
             position: relative;
-            overflow: hidden;
             display: flex;
             justify-content: center;
         }
@@ -354,88 +254,73 @@
             align-items: center;
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
             opacity: 0;
-            transform: translateX(100%); /* Start off-screen right */
+            transform: translateX(100%);
             pointer-events: none;
         }
-
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: auto;
-        }
-
-        .slide.prev {
-            opacity: 0;
-            transform: translateX(-100%); /* Exit to left */
-        }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .slide.prev { opacity: 0; transform: translateX(-100%); }
 
         .question-text {
             font-size: 20px;
             color: #444;
             margin-bottom: 15px;
             font-weight: 500;
+            transition: color 0.3s;
+            padding: 0 10px;
         }
 
-        /* --- Global Helper Classes --- */
-        .hidden { display: none !important; }
+        /* --- Logic Specific Classes --- */
+        .stage-gift .gift-svg { display: block; transform: scale(1); }
+
+        .stage-ram .gift-svg { display: none; }
+        .stage-ram .ram-container { display: flex; opacity: 1; transform: translateY(0) rotate(0deg); }
+
+        .stage-infinity .ram-container { display: none; }
+        .stage-infinity .infinity-svg { display: block; opacity: 1; }
+
+        .stage-envelope .infinity-svg { display: none; }
+        .stage-envelope .envelope-svg { display: block; opacity: 1; transform: scale(1); }
+
+        /* Effects */
+        .charging {
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .super-charged {
+            filter: drop-shadow(0 0 10px #ff00ff) drop-shadow(0 0 20px #00ffff);
+            stroke: url(#rainbowGradient); /* For the infinity SVG stroke */
+            stroke-dashoffset: 0 !important; /* Draw the line */
+        }
+        
+        .text-glow {
+            background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
         .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-
-        /* Reveal State: Present Gift Box */
-        .present-gift .piece-left,
-        .present-gift .piece-right,
-        .present-gift .heart-full {
-            display: none;
-        }
-        .present-gift .gift-svg {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Reveal State: Open Gift (Show Stapler Pin) */
-        .open-gift .piece-left,
-        .open-gift .piece-right,
-        .open-gift .heart-full,
-        .open-gift .gift-svg {
-            display: none;
-        }
-        .open-gift .stapler-svg {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Reveal State: Show Calendar */
-        .show-calendar .piece-left,
-        .show-calendar .piece-right,
-        .show-calendar .heart-full,
-        .show-calendar .gift-svg,
-        .show-calendar .stapler-svg { /* Hide gift items */
-            display: none;
-        }
-        .show-calendar .calendar-svg { display: block; opacity: 1; transform: translateY(0); }
-
-        /* --- Confetti Canvas --- */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 50;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     </style>
 </head>
 <body>
-
-    <!-- Gradient Definition for Rainbow Heart -->
     <svg width="0" height="0" style="position:absolute;">
         <defs>
-            <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" style="stop-color:#ff0000;stop-opacity:1" />
                 <stop offset="16%" style="stop-color:#ff7f00;stop-opacity:1" />
                 <stop offset="33%" style="stop-color:#ffff00;stop-opacity:1" />
@@ -447,85 +332,55 @@
         </defs>
     </svg>
 
-    <!-- Desktop Environment -->
-
-    <!-- Icon 1: Application -->
+    <!-- App Icon -->
     <div class="desktop-icon" id="icon-love">
         <div class="icon-img"></div>
         <div class="icon-label">love.exe</div>
     </div>
 
-    <!-- Icon 2: Sticky Note (Static) -->
+    <!-- Sticky Note Icon -->
     <div class="desktop-icon" id="icon-note">
         <div class="note-img">hello</div>
-        <!-- No label, note itself has text -->
     </div>
 
-    <!-- The Application Window -->
     <div class="window" id="app">
         <div class="title-bar">
             <span>love.exe</span>
             <div class="controls">
-                <div class="dot min-btn"></div>
-                <div class="dot max-btn"></div>
                 <div class="dot close-btn" id="closeBtn"></div>
             </div>
         </div>
-
+        
         <div class="content">
-
             <!-- Screen 1: Login -->
             <div id="screen-login">
                 <div class="avatar">
                     <svg viewBox="0 0 100 100" width="100%" height="100%">
-                        <rect width="100" height="100" fill="#0f172a"/>
-                        <!-- Main Star -->
-                        <path d="M50 25 L54 37 L66 37 L57 44 L60 56 L50 49 L40 56 L43 44 L34 37 L46 37 Z" fill="#fcd34d" />
-                        <!-- Scattered Stars -->
-                        <circle cx="20" cy="30" r="2" fill="#fff" opacity="0.8"/>
-                        <circle cx="85" cy="25" r="3" fill="#fde047" opacity="0.9"/>
-                        <circle cx="25" cy="75" r="2" fill="#fff" opacity="0.6"/>
-                        <circle cx="75" cy="80" r="4" fill="#fbbf24"/>
-                        <circle cx="50" cy="75" r="1.5" fill="#fff" opacity="0.5"/>
-                        <circle cx="90" cy="55" r="2" fill="#fff" opacity="0.7"/>
-                        <circle cx="10" cy="55" r="2.5" fill="#fcd34d"/>
-                        <!-- Small twinkling star -->
-                        <path d="M75 45 L76 48 L79 48 L77 50 L78 53 L75 51 L72 53 L73 50 L71 48 L74 48 Z" fill="#fff" />
+                        <!-- Sky -->
+                        <rect width="100" height="100" fill="#a2d2ff"/>
+                        <!-- Sun -->
+                        <circle cx="50" cy="55" r="25" fill="#fcd34d"/>
+                        <!-- Rays -->
+                        <g stroke="#fcd34d" stroke-width="4" stroke-linecap="round">
+                            <line x1="50" y1="20" x2="50" y2="10"/>
+                            <line x1="80" y1="55" x2="90" y2="55"/>
+                            <line x1="20" y1="55" x2="10" y2="55"/>
+                            <line x1="75" y1="30" x2="82" y2="23"/>
+                            <line x1="25" y1="30" x2="18" y2="23"/>
+                        </g>
+                        <!-- Hills/Landscape -->
+                        <path d="M0 100 L0 75 Q 30 55 60 75 T 100 70 V 100 Z" fill="#86efac"/>
+                        <path d="M0 100 L0 85 Q 40 70 80 90 L 100 90 V 100 Z" fill="#4ade80"/>
                     </svg>
                 </div>
-                <div class="username">Dawn</div>
+                <div class="username">my valentine</div>
                 <button class="btn" id="loginBtn">Login</button>
             </div>
 
-            <!-- Screen 2: The Main Sequence -->
-            <div id="screen-question">
-
-                <!-- Icon Stage: Handles Heart, Gift, Stapler & Calendar -->
+            <!-- Screen 2: Main -->
+            <div id="screen-main">
                 <div class="icon-stage" id="iconStage">
-
-                    <!-- 1. Broken Heart Pieces -->
-                    <div class="heart-piece piece-left">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-                    <div class="heart-piece piece-right">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-
-                    <!-- 1b. Full Rainbow Heart (Fades in) -->
-                    <div class="heart-full">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path fill="url(#rainbowGradient)" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-
-                    <!-- 2. Gift Box SVG -->
+                    <!-- Gift Box -->
                     <svg class="gift-svg" viewBox="0 0 100 100">
                         <rect x="20" y="40" width="60" height="50" rx="4" fill="#ff6b81" />
                         <rect x="15" y="25" width="70" height="15" rx="2" fill="#ff4757" />
@@ -533,218 +388,188 @@
                         <path d="M50 25 C 50 25 30 5 20 25 C 15 35 45 30 50 25" fill="none" stroke="#f8f9fa" stroke-width="4" stroke-linecap="round"/>
                         <path d="M50 25 C 50 25 70 5 80 25 C 85 35 55 30 50 25" fill="none" stroke="#f8f9fa" stroke-width="4" stroke-linecap="round"/>
                     </svg>
-
-                    <!-- 2b. Stapler Pin SVG (Inside Gift) -->
-                    <svg class="stapler-svg" viewBox="0 0 100 100">
-                        <!-- U shape staple -->
-                        <path d="M25 60 V 30 A 5 5 0 0 1 75 30 V 60" />
+                    <!-- RAM Stick with Label -->
+                    <div class="ram-container">
+                        <svg class="ram-svg" viewBox="0 0 100 50">
+                            <rect x="0" y="10" width="100" height="35" rx="2" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                            <rect x="10" y="18" width="15" height="15" fill="#34495e"/>
+                            <rect x="30" y="18" width="15" height="15" fill="#34495e"/>
+                            <rect x="50" y="18" width="15" height="15" fill="#34495e"/>
+                            <rect x="70" y="18" width="15" height="15" fill="#34495e"/>
+                            <path d="M5 45 L95 45" stroke="#f1c40f" stroke-width="3" stroke-dasharray="8 2"/>
+                        </svg>
+                        <div class="ram-label">stick of ram</div>
+                    </div>
+                    <!-- Infinity -->
+                    <svg class="infinity-svg" viewBox="0 0 100 50">
+                        <path d="M20,25 C20,10 40,10 50,25 C60,40 80,40 80,25 C80,10 60,10 50,25 C40,40 20,40 20,25 Z" />
                     </svg>
-
-                    <!-- 3. Calendar Icon -->
-                    <svg class="calendar-svg" viewBox="0 0 100 100">
-                        <rect x="15" y="20" width="70" height="70" rx="10" fill="#fff" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="15" y1="40" x2="85" y2="40" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="30" y1="10" x2="30" y2="25" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="70" y1="10" x2="70" y2="25" stroke="#ff6b81" stroke-width="4"/>
-                        <text x="50" y="75" font-family="Arial, sans-serif" font-size="30" fill="#ff6b81" text-anchor="middle" font-weight="bold">14</text>
+                    <!-- Envelope -->
+                    <svg class="envelope-svg" viewBox="0 0 100 100">
+                         <rect x="10" y="25" width="80" height="50" rx="5" fill="#fff" stroke="#444" stroke-width="2"/>
+                         <path d="M10 25 L 50 55 L 90 25" fill="none" stroke="#444" stroke-width="2"/>
+                         <path d="M10 75 L 40 50" fill="none" stroke="#444" stroke-width="2"/>
+                         <path d="M90 75 L 60 50" fill="none" stroke="#444" stroke-width="2"/>
                     </svg>
-
                 </div>
 
-                <!-- Slideshow Container -->
                 <div class="slides-container">
-
-                    <!-- Slide 1: Question -->
+                    <!-- 1. Gift Box (Start here) -->
                     <div class="slide active" id="slide1">
-                        <h2 class="question-text">Will you be my valentine?</h2>
-                        <button class="btn" id="btnYes" style="background:#28c940;">YES</button>
-
-                        <!-- Taped off NO button -->
-                        <div class="no-btn-wrapper">
-                            <button class="btn" style="background:#ff4757; cursor: not-allowed; opacity: 0.8; box-shadow: none; transform: none;">NO</button>
-                            <div class="tape-strip">OUT OF ORDER</div>
-                        </div>
-                        <div style="font-size: 11px; color: #888; margin-top: 10px; font-style: italic;">(still working on the no button)</div>
-                    </div>
-
-                    <!-- Slide 2: YAY with Rainbow Heart -->
-                    <div class="slide" id="slide2">
-                        <h2 class="question-text">YAY!</h2>
-                        <button class="btn" id="btnYayNext" style="background:#ff6b81;">yay</button>
-                    </div>
-
-                    <!-- Slide 3: Gift Offer -->
-                    <div class="slide" id="slide3">
                         <h2 class="question-text">I have a gift for you</h2>
                         <button class="btn" id="btnOpenGift" style="background:#70a1ff;">open it</button>
                     </div>
-
-                    <!-- Slide 4: Hope you like it -->
+                    <!-- 2. RAM -->
+                    <div class="slide" id="slide2">
+                        <h2 class="question-text">For infinite happy memories</h2>
+                        <button class="btn" id="btnNextRam" style="background:#28c940;">awesome</button>
+                    </div>
+                    <!-- 3. Infinity -->
+                    <div class="slide" id="slide3">
+                        <h2 class="question-text" id="infinityText">I love you till infinity</h2>
+                        <button class="btn" id="btnUpdate" style="background:#ff9f43;">get latest update</button>
+                        <button class="btn hidden" id="btnNextInf" style="background:#28c940; margin-top:10px;">next</button>
+                    </div>
+                    <!-- 4. Letter -->
                     <div class="slide" id="slide4">
-                        <h2 class="question-text">Hope you like it, it's a stapler pin!</h2>
-                        <button class="btn" id="btnIDo" style="background:#2ed573;">i do</button>
+                        <h2 class="question-text">You have a letter</h2>
+                        <button class="btn" id="btnRead" style="background:#ff6b81;">read it</button>
                     </div>
-
-                    <!-- Slide 5: Final Reveal -->
-                    <div class="slide" id="slide5">
-                        <h2 class="question-text">Visit again on the 14th</h2>
-                        <button class="btn" id="btnFinish" style="background:#ff4757;">&lt;3</button>
-                    </div>
-
                 </div>
-
             </div>
-
         </div>
     </div>
-
     <canvas id="confetti-canvas"></canvas>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Elements ---
-            const appWindow = document.getElementById('app');
+            const app = document.getElementById('app');
             const iconLove = document.getElementById('icon-love');
             const closeBtn = document.getElementById('closeBtn');
             const loginBtn = document.getElementById('loginBtn');
-
+            
             const screenLogin = document.getElementById('screen-login');
-            const screenQuestion = document.getElementById('screen-question');
+            const screenMain = document.getElementById('screen-main');
             const iconStage = document.getElementById('iconStage');
-
-            // Buttons
-            const btnYes = document.getElementById('btnYes');
-            const btnYayNext = document.getElementById('btnYayNext');
+            
             const btnOpenGift = document.getElementById('btnOpenGift');
-            const btnIDo = document.getElementById('btnIDo');
-            const btnFinish = document.getElementById('btnFinish');
+            const btnNextRam = document.getElementById('btnNextRam');
+            const btnUpdate = document.getElementById('btnUpdate');
+            const btnNextInf = document.getElementById('btnNextInf');
+            const btnRead = document.getElementById('btnRead');
 
-            // Slides
+            const infinityText = document.getElementById('infinityText');
+
             const slides = {
                 1: document.getElementById('slide1'),
                 2: document.getElementById('slide2'),
                 3: document.getElementById('slide3'),
-                4: document.getElementById('slide4'),
-                5: document.getElementById('slide5')
+                4: document.getElementById('slide4')
             };
 
-            // --- Event Listeners ---
+            // Transitions
+            function switchSlide(from, to) {
+                slides[from].classList.remove('active');
+                slides[from].classList.add('prev');
+                slides[to].classList.add('active');
+                setTimeout(() => slides[from].classList.remove('prev'), 600);
+            }
 
-            // Open App
-            iconLove.addEventListener('click', () => {
-                appWindow.classList.add('open');
-            });
-
-            // Close App
+            // Listeners
+            iconLove.addEventListener('click', () => app.classList.add('open'));
             closeBtn.addEventListener('click', () => {
-                appWindow.classList.remove('open');
-                setTimeout(() => {
-                    location.reload();
-                }, 500);
+                app.classList.remove('open');
+                setTimeout(() => location.reload(), 500);
             });
 
-            // Login
+            // Login -> Main Screen (Gift Box)
             loginBtn.addEventListener('click', () => {
                 screenLogin.classList.add('fade-out');
                 setTimeout(() => {
                     screenLogin.style.display = 'none';
-                    screenQuestion.style.display = 'flex';
+                    screenMain.style.display = 'flex';
+                    // Initialize stage with gift
+                    iconStage.classList.add('stage-gift');
                 }, 500);
             });
 
-            // Sequence
-            btnYes.addEventListener('click', acceptValentine);
-            btnYayNext.addEventListener('click', goToGift);
-            btnOpenGift.addEventListener('click', revealGift);
-            btnIDo.addEventListener('click', finishLike);
-            btnFinish.addEventListener('click', finishApp);
-
-
-            // --- Logic Functions ---
-
-            function transitionSlide(currentId, nextId) {
-                const currentSlide = slides[currentId];
-                const nextSlide = slides[nextId];
-
-                currentSlide.classList.remove('active');
-                currentSlide.classList.add('prev');
-
-                nextSlide.classList.add('active');
-
-                setTimeout(() => {
-                    currentSlide.classList.remove('prev');
-                }, 600);
-            }
-
-            // Step 1: Clicked "YES" -> Morph Heart (Close then Fade), show Yay text
-            function acceptValentine() {
-                iconStage.classList.add('healed');
+            // 1 -> 2: Open Gift clicked -> Show RAM
+            btnOpenGift.addEventListener('click', () => {
+                iconStage.classList.remove('stage-gift');
+                iconStage.classList.add('stage-ram');
                 startConfetti();
-                transitionSlide(1, 2);
-            }
+                switchSlide(1, 2);
+            });
 
-            // Step 2: Clicked "yay" -> Move to gift text, Hide Heart, Show Gift Box
-            function goToGift() {
-                iconStage.classList.add('present-gift');
-                transitionSlide(2, 3);
-            }
+            // 2 -> 3: Awesome clicked -> Show Infinity
+            btnNextRam.addEventListener('click', () => {
+                iconStage.classList.remove('stage-ram');
+                iconStage.classList.add('stage-infinity');
+                switchSlide(2, 3);
+                
+                // Reset infinity state just in case
+                document.querySelector('.infinity-svg').style.strokeDashoffset = '300'; 
+            });
 
-            // Step 3: Clicked "open it" -> Hide Gift Box, Show Stapler Pin, Show "Hope you like it"
-            function revealGift() {
-                iconStage.classList.remove('present-gift');
-                iconStage.classList.add('open-gift');
-                transitionSlide(3, 4);
-                startConfetti();
-            }
-
-            // Step 4: Clicked "i do" -> Hide Stapler, Show Calendar
-            function finishLike() {
-                iconStage.classList.remove('open-gift');
-                iconStage.classList.add('show-calendar');
-                transitionSlide(4, 5);
-            }
-
-            // Step 5: Clicked "<3" -> Close
-            function finishApp() {
-                btnFinish.style.transform = "scale(1.2)";
+            // Update Process
+            btnUpdate.addEventListener('click', () => {
+                const stage = document.querySelector('.icon-stage');
+                btnUpdate.innerHTML = "Updating...";
+                btnUpdate.style.cursor = "wait";
+                
+                // Charge up effect
+                stage.classList.add('charging');
+                
                 setTimeout(() => {
-                    btnFinish.style.transform = "scale(1)";
+                    stage.classList.remove('charging');
+                    document.querySelector('.infinity-svg').classList.add('super-charged');
+                    
+                    // Change text
+                    infinityText.innerHTML = "I love you till infinity and beyond";
+                    infinityText.classList.add('text-glow');
+                    
+                    // Show next button
+                    btnUpdate.style.display = 'none';
+                    btnNextInf.classList.remove('hidden');
+                    
                     startConfetti();
-                }, 200);
-            }
+                }, 2000); // 2 second charge
+            });
 
-            // --- Confetti Engine ---
+            // 3 -> 4: Next Infinity clicked -> Show Letter
+            btnNextInf.addEventListener('click', () => {
+                iconStage.classList.remove('stage-infinity');
+                iconStage.classList.add('stage-envelope');
+                switchSlide(3, 4);
+            });
+
+            // 4: Read Letter
+            btnRead.addEventListener('click', () => {
+                // Placeholder link
+                
+                window.location.href = "https://creatomat.github.io/dawn.pdf";
+            });
+
+            // --- Confetti ---
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
             let confettiActive = false;
-            let isSpawning = false;
             let particles = [];
-            let animationId;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
+            
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize); resize();
 
             class Particle {
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = -10;
-                    this.size = Math.random() * 10 + 5;
+                    this.size = Math.random() * 8 + 4;
                     this.speedY = Math.random() * 3 + 2;
                     this.speedX = Math.random() * 4 - 2;
-                    this.color = ['#ff4757', '#2ed573', '#eccc68', '#70a1ff', '#ff6b81'][Math.floor(Math.random() * 5)];
+                    this.color = ['#ff4757', '#2ecc71', '#3498db', '#f1c40f'][Math.floor(Math.random() * 4)];
                     this.rotation = Math.random() * 360;
-                    this.rotationSpeed = Math.random() * 10 - 5;
                 }
-                update() {
-                    this.y += this.speedY;
-                    this.x += this.speedX;
-                    this.rotation += this.rotationSpeed;
-                }
+                update() { this.y += this.speedY; this.x += this.speedX; this.rotation += 5; }
                 draw() {
                     ctx.save();
                     ctx.translate(this.x, this.y);
@@ -756,44 +581,29 @@
             }
 
             function startConfetti() {
-                if(confettiActive && isSpawning) return;
-
-                confettiActive = true;
-                isSpawning = true;
-
-                if (particles.length === 0) {
-                    loop();
+                if(!confettiActive) {
+                    confettiActive = true;
+                    spawn();
+                    animate();
+                    setTimeout(() => confettiActive = false, 2000);
                 }
-
-                setTimeout(() => {
-                    isSpawning = false;
-                }, 2000);
+            }
+            
+            function spawn() {
+                if(confettiActive) {
+                    particles.push(new Particle());
+                    if(particles.length < 100) requestAnimationFrame(spawn);
+                }
             }
 
-            function loop() {
-                if (!confettiActive && particles.length === 0) return;
-
+            function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                if (isSpawning && particles.length < 150) {
-                    particles.push(new Particle());
-                }
-
-                for (let i = 0; i < particles.length; i++) {
-                    particles[i].update();
-                    particles[i].draw();
-
-                    if (particles[i].y > canvas.height) {
-                        particles.splice(i, 1);
-                        i--;
-                    }
-                }
-
-                if (particles.length > 0 || isSpawning) {
-                    animationId = requestAnimationFrame(loop);
-                } else {
-                    confettiActive = false;
-                }
+                particles.forEach((p, i) => {
+                    p.update();
+                    p.draw();
+                    if(p.y > canvas.height) particles.splice(i, 1);
+                });
+                if(particles.length > 0 || confettiActive) requestAnimationFrame(animate);
             }
         });
     </script>
