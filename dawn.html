@@ -469,10 +469,106 @@
             }
         }
 
-        /* ==========================================
+      /* ==========================================
            CONFETTI ENGINE (FINAL PAGE ONLY)
            ========================================== */
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let confettiPieces = [];
-        let
+        let confettiAnimationId = null;
+        let isConfettiRunning = false;
+
+        const confettiColors = [
+            '#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c1',
+            '#fde047', '#c084fc', '#38bdf8', '#4ade80', '#ffffff'
+        ];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createConfettiPiece(startFromTop = true) {
+            const isHeart = Math.random() < 0.35;
+            return {
+                x: Math.random() * canvas.width,
+                y: startFromTop ? -20 - Math.random() * 80 : Math.random() * canvas.height,
+                size: isHeart ? 10 + Math.random() * 8 : 7 + Math.random() * 6,
+                speedY: 1.6 + Math.random() * 2.4,
+                speedX: (Math.random() - 0.5) * 1.5,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 4,
+                wobble: Math.random() * Math.PI * 2,
+                wobbleSpeed: 0.03 + Math.random() * 0.04,
+                color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+                isHeart: isHeart
+            };
+        }
+
+        function drawHeartShape(ctx, size) {
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(0, topCurveHeight);
+            ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+            ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, (size + topCurveHeight) / 1.4, 0, size);
+            ctx.bezierCurveTo(0, (size + topCurveHeight) / 1.4, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+            ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function animateConfetti() {
+            if (!isConfettiRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < confettiPieces.length; i++) {
+                const p = confettiPieces[i];
+                p.y += p.speedY;
+                p.wobble += p.wobbleSpeed;
+                p.x += p.speedX + Math.sin(p.wobble) * 0.8;
+                p.rotation += p.rotationSpeed;
+
+                if (p.y > canvas.height + 30) {
+                    confettiPieces[i] = createConfettiPiece(true);
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+
+                if (p.isHeart) {
+                    drawHeartShape(ctx, p.size);
+                } else {
+                    ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.65);
+                }
+                ctx.restore();
+            }
+
+            confettiAnimationId = requestAnimationFrame(animateConfetti);
+        }
+
+        function startConfetti() {
+            if (isConfettiRunning) return;
+            isConfettiRunning = true;
+            confettiPieces = [];
+            for (let i = 0; i < 80; i++) {
+                confettiPieces.push(createConfettiPiece(false));
+            }
+            animateConfetti();
+        }
+
+        function stopConfetti() {
+            isConfettiRunning = false;
+            if (confettiAnimationId) {
+                cancelAnimationFrame(confettiAnimationId);
+                confettiAnimationId = null;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>
