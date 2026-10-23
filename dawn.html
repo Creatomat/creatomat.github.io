@@ -1,634 +1,478 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love.exe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Praju 💕</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Reset & Base --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- Desktop Icon --- */
-        .desktop-icon {
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100dvh;
+            transition: background 0.9s ease;
+            user-select: none;
+        }
+
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Progressive Romantic Background Themes */
+        .bg-theme-1 {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fce7f3 100%);
+        }
+        .bg-theme-2 {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 50%, #fce7f3 100%);
+        }
+        .bg-theme-3 {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fbcfe8 100%);
+        }
+        .bg-theme-4 {
+            background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 50%, #f9a8d4 100%);
+        }
+        .bg-theme-5 {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 45%, #f472b6 100%);
+        }
+        .bg-theme-6 {
+            background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 50%, #e11d48 100%);
+        }
+        .bg-theme-7 {
+            background: linear-gradient(135deg, #be185d 0%, #e11d48 50%, #fb7185 100%);
+        }
+
+        /* Page Transitions */
+        .story-page {
             position: absolute;
-            top: 50px;
-            left: 50px;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer;
-            width: 80px;
-            transition: transform 0.1s;
+            justify-content: center;
+            padding: 1.25rem;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 0.5s ease, transform 0.5s ease;
             z-index: 10;
         }
-        .desktop-icon:active { transform: scale(0.95); }
-        .icon-img {
-            width: 48px;
-            height: 48px;
-            background: #ff6b81;
-            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
-            mask-size: contain;
-            -webkit-mask-size: contain;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            background-color: #ff4757;
-        }
-        .icon-label {
-            margin-top: 8px;
-            color: white;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            font-size: 14px;
-            font-weight: 500;
-        }
 
-        /* --- Window System --- */
-        .window {
-            width: 380px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            transform: scale(0);
-            opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s;
-            position: relative;
-            z-index: 20;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        .window.open {
-            transform: scale(1);
+        .story-page.active {
             opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
         }
 
-        /* Title Bar */
-        .title-bar {
-            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            padding: 10px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 0.5px;
+        .story-page.exit-up {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-20px) scale(0.98);
         }
-        .controls { display: flex; gap: 6px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); }
-        .dot.close-btn { background: #ff5f57; cursor: pointer; }
-        .dot.min-btn { background: #ffbd2e; }
-        .dot.max-btn { background: #28c940; }
 
-        /* Window Content */
-        .content {
-            padding: 30px;
-            min-height: 380px; 
+        /* Clean Card */
+        .story-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 16px 36px -12px rgba(225, 29, 72, 0.16);
+            border-radius: 1.75rem;
+            width: 100%;
+            max-width: 385px;
+            max-height: 88dvh;
+            padding: 1.75rem 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             text-align: center;
             position: relative;
-            overflow: hidden; 
+            overflow-y: auto;
+            scrollbar-width: none;
         }
 
-        /* --- Screen 1: Login --- */
-        #screen-login {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeIn 0.5s ease;
-            position: absolute; 
-            z-index: 10;
-        }
-        .avatar {
-            width: 100px;
-            height: 100px;
-            background: #eee;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid #ff9a9e;
-        }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .username {
-            font-size: 24px;
-            color: #444;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        .btn {
-            background: #ff6b81;
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background: #ff4757;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 107, 129, 0.4);
-        }
-        .btn:active { transform: translateY(0); }
-
-        /* --- Screen 2: Sequence Container --- */
-        #screen-question {
+        .story-card::-webkit-scrollbar {
             display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Icon Wrapper */
-        .icon-stage {
-            width: 150px;
-            height: 130px;
-            position: relative;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        /* Broken Heart Styling */
-        .heart-piece {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            fill: #ff4757;
-            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), filter 0.5s, opacity 0.5s;
-        }
-        .piece-left {
-            clip-path: polygon(0% 0%, 50% 0%, 40% 40%, 50% 100%, 0% 100%);
-            transform: translate(-20px, -10px) rotate(-15deg);
-        }
-        .piece-right {
-            clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 60% 40%);
-            transform: translate(25px, -15px) rotate(15deg);
-        }
-        
-        /* Full Rainbow Heart (Hidden initially) */
-        .heart-full {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .heart-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-
-        /* Heart Healed State */
-        .icon-stage.healed .piece-left,
-        .icon-stage.healed .piece-right { 
-            opacity: 0; /* Hide broken pieces */
-            transform: translate(0, 0) rotate(0) scale(0.9);
-        }
-        .icon-stage.healed .heart-full {
-            opacity: 1;
-            transform: scale(1);
-            filter: drop-shadow(0 0 15px rgba(255, 100, 150, 0.6));
-            animation: heartbeat 1.5s infinite ease-in-out;
-        }
-
-        @keyframes heartbeat {
+        /* Final Page Heart Pulse Animation Only */
+        @keyframes finalHeartPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.07); }
         }
 
-        /* Stapler Styling */
-        .stapler-svg {
-            width: 100px;
-            height: 100px;
-            display: none;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            stroke: #a4b0be;
-            stroke-width: 12;
-            fill: none;
-            stroke-linecap: round;
+        .animate-final-heart {
+            animation: finalHeartPulse 2s ease-in-out infinite;
         }
 
-        /* Calendar Styling */
-        .calendar-svg {
-            width: 100px;
-            height: 100px;
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-
-        /* --- Slideshow Container --- */
-        .slides-container {
-            width: 100%;
-            height: 120px; /* Fixed height to contain text+btn */
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-        }
-
-        .slide {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
+        /* Romantic Interactive Button */
+        .romantic-btn {
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+            color: white;
+            font-weight: 700;
+            border-radius: 9999px;
+            padding: 0.85rem 2.25rem;
+            box-shadow: 0 8px 20px -4px rgba(225, 29, 72, 0.4),
+                        0 0 0 3px rgba(255, 255, 255, 0.85);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
             align-items: center;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
-            opacity: 0;
-            transform: translateX(100%); /* Start off-screen right */
-            pointer-events: none;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            position: relative;
         }
 
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: auto;
+        .romantic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -4px rgba(225, 29, 72, 0.5),
+                        0 0 0 3px rgba(255, 255, 255, 0.95);
         }
 
-        .slide.prev {
-            opacity: 0;
-            transform: translateX(-100%); /* Exit to left */
+        .romantic-btn:active {
+            transform: translateY(1px) scale(0.97);
         }
 
-        .question-text {
-            font-size: 20px;
-            color: #444;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        /* --- Global Helper Classes --- */
-        .hidden { display: none !important; }
-        .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        
-        .show-stapler .piece-left, .show-stapler .piece-right, .show-stapler .heart-full { display: none; }
-        .show-stapler .stapler-svg { display: block; opacity: 1; transform: scale(1); }
-        
-        .show-calendar .stapler-svg { opacity: 0; transform: translateY(-20px); }
-        .show-calendar .calendar-svg { display: block; opacity: 1; transform: translateY(0); }
-
-        /* --- Confetti Canvas --- */
+        /* Confetti Canvas */
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
-            z-index: 50;
+            z-index: 30;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     </style>
 </head>
-<body>
+<body class="bg-theme-1">
 
-    <!-- Gradient Definition for Rainbow Heart -->
-    <svg width="0" height="0" style="position:absolute;">
-        <defs>
-            <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ff0000;stop-opacity:1" />
-                <stop offset="16%" style="stop-color:#ff7f00;stop-opacity:1" />
-                <stop offset="33%" style="stop-color:#ffff00;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:#00ff00;stop-opacity:1" />
-                <stop offset="66%" style="stop-color:#0000ff;stop-opacity:1" />
-                <stop offset="83%" style="stop-color:#4b0082;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#9400d3;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-    </svg>
-
-    <!-- Desktop Environment -->
-    <!-- ADDED ID HERE, REMOVED ONCLICK -->
-    <div class="desktop-icon" id="desktopIcon">
-        <div class="icon-img"></div>
-        <div class="icon-label">love.exe</div>
-    </div>
-
-    <!-- The Application Window -->
-    <div class="window" id="app">
-        <div class="title-bar">
-            <span>love.exe</span>
-            <div class="controls">
-                <!-- Added IDs to buttons for safer JS binding -->
-                <div class="dot min-btn"></div>
-                <div class="dot max-btn"></div>
-                <div class="dot close-btn" id="closeBtn"></div>
-            </div>
-        </div>
-        
-        <div class="content">
-            
-            <!-- Screen 1: Login -->
-            <div id="screen-login">
-                <div class="avatar">
-                    <svg viewBox="0 0 100 100" width="100%" height="100%">
-                        <rect width="100" height="100" fill="#f8f9fa"/>
-                        <circle cx="50" cy="40" r="25" fill="#ffccd5"/>
-                        <path d="M10 100 Q 50 50 90 100" fill="#a2d2ff"/>
-                    </svg>
-                </div>
-                <div class="username">Dawn</div>
-                <button class="btn" id="loginBtn">Login</button>
-            </div>
-
-            <!-- Screen 2: The Main Sequence -->
-            <div id="screen-question">
-                
-                <!-- Icon Stage: Handles Heart, Stapler, Calendar -->
-                <div class="icon-stage" id="iconStage">
-                    
-                    <!-- 1. Broken Heart Pieces -->
-                    <div class="heart-piece piece-left">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-                    <div class="heart-piece piece-right">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-
-                    <!-- 1b. Full Rainbow Heart (Fades in) -->
-                    <div class="heart-full">
-                        <svg class="heart-svg" viewBox="0 0 32 29.6">
-                            <path fill="url(#rainbowGradient)" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-                            c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-                        </svg>
-                    </div>
-
-                    <!-- 2. Stapler Pin -->
-                    <svg class="stapler-svg" viewBox="0 0 100 100">
-                        <!-- U shape staple -->
-                        <path d="M25 60 V 30 A 5 5 0 0 1 75 30 V 60" />
-                    </svg>
-
-                    <!-- 3. Calendar Icon -->
-                    <svg class="calendar-svg" viewBox="0 0 100 100">
-                        <rect x="15" y="20" width="70" height="70" rx="10" fill="#fff" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="15" y1="40" x2="85" y2="40" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="30" y1="10" x2="30" y2="25" stroke="#ff6b81" stroke-width="4"/>
-                        <line x1="70" y1="10" x2="70" y2="25" stroke="#ff6b81" stroke-width="4"/>
-                        <text x="50" y="75" font-family="Arial, sans-serif" font-size="30" fill="#ff6b81" text-anchor="middle" font-weight="bold">14</text>
-                    </svg>
-
-                </div>
-                
-                <!-- Slideshow Container -->
-                <div class="slides-container">
-                    
-                    <!-- Slide 1 -->
-                    <div class="slide active" id="slide1">
-                        <h2 class="question-text">Will you be my valentine?</h2>
-                        <button class="btn" id="btnYes" style="background:#28c940;">YES</button>
-                    </div>
-
-                    <!-- Slide 2 -->
-                    <div class="slide" id="slide2">
-                        <h2 class="question-text">I have a gift for you</h2>
-                        <button class="btn" id="btnWhat" style="background:#70a1ff;">what?</button>
-                    </div>
-
-                    <!-- Slide 3 -->
-                    <div class="slide" id="slide3">
-                        <h2 class="question-text">hello!</h2>
-                        <button class="btn" id="btnAccept" style="background:#2ed573;">accept</button>
-                    </div>
-
-                    <!-- Slide 4 -->
-                    <div class="slide" id="slide4">
-                        <h2 class="question-text">See you on the 14th</h2>
-                        <button class="btn" id="btnYay" style="background:#ff4757;">yay!</button>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-
+    <!-- Confetti Overlay Canvas (Active on Final Page) -->
     <canvas id="confetti-canvas"></canvas>
 
+    <!-- ==========================================
+         PAGE 1: RAM STICK & STAPLER PIN
+         ========================================== -->
+    <section id="page-1" class="story-page active">
+        <div class="story-card space-y-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 leading-snug">
+                Hi praju, remember this?
+            </h1>
+
+            <!-- Simple, Clean Flat RAM Stick SVG -->
+            <div class="w-full flex justify-center py-1">
+                <svg viewBox="0 0 280 90" class="w-60 sm:w-64 h-auto" aria-label="RAM Stick">
+                    <!-- Gold Contact Pins Strip with Notch -->
+                    <rect x="24" y="66" width="108" height="12" rx="1.5" fill="#eab308"/>
+                    <rect x="148" y="66" width="108" height="12" rx="1.5" fill="#eab308"/>
+
+                    <!-- Simple Pin Dividers -->
+                    <g stroke="#ca8a04" stroke-width="1.5">
+                        <line x1="36" y1="66" x2="36" y2="78"/>
+                        <line x1="48" y1="66" x2="48" y2="78"/>
+                        <line x1="60" y1="66" x2="60" y2="78"/>
+                        <line x1="72" y1="66" x2="72" y2="78"/>
+                        <line x1="84" y1="66" x2="84" y2="78"/>
+                        <line x1="96" y1="66" x2="96" y2="78"/>
+                        <line x1="108" y1="66" x2="108" y2="78"/>
+                        <line x1="120" y1="66" x2="120" y2="78"/>
+                        <line x1="160" y1="66" x2="160" y2="78"/>
+                        <line x1="172" y1="66" x2="172" y2="78"/>
+                        <line x1="184" y1="66" x2="184" y2="78"/>
+                        <line x1="196" y1="66" x2="196" y2="78"/>
+                        <line x1="208" y1="66" x2="208" y2="78"/>
+                        <line x1="220" y1="66" x2="220" y2="78"/>
+                        <line x1="232" y1="66" x2="232" y2="78"/>
+                        <line x1="244" y1="66" x2="244" y2="78"/>
+                    </g>
+
+                    <!-- Flat Green PCB Board -->
+                    <rect x="14" y="14" width="252" height="54" rx="4" fill="#16a34a"/>
+
+                    <!-- Side Notch Cutouts -->
+                    <circle cx="14" cy="41" r="5" fill="#ffffff"/>
+                    <circle cx="266" cy="41" r="5" fill="#ffffff"/>
+
+                    <!-- 4 Simple Dark Grey Rectangular Memory Chips -->
+                    <rect x="32" y="24" width="42" height="32" rx="2.5" fill="#334155"/>
+                    <rect x="90" y="24" width="42" height="32" rx="2.5" fill="#334155"/>
+                    <rect x="148" y="24" width="42" height="32" rx="2.5" fill="#334155"/>
+                    <rect x="206" y="24" width="42" height="32" rx="2.5" fill="#334155"/>
+                </svg>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-700">
+                Or this?
+            </h2>
+
+            <!-- Simple, Clean Metallic Stapler Pin SVG -->
+            <div class="w-full flex justify-center py-1">
+                <svg viewBox="0 0 220 85" class="w-48 sm:w-56 h-auto" aria-label="Stapler Pin">
+                    <!-- Clean U-Shaped Bent Wire Staple -->
+                    <path d="M 45 72 L 45 22 Q 45 16 51 16 L 169 16 Q 175 16 175 22 L 175 72 L 165 65 L 165 25 L 55 25 L 55 65 Z" 
+                          fill="#94a3b8" 
+                          stroke="#64748b" 
+                          stroke-width="2" 
+                          stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div class="pt-2 w-full flex justify-center">
+                <button onclick="goToPage(2)" class="romantic-btn">
+                    I do!!
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 2: START OF OUR FRIENDSHIP
+         ========================================== -->
+    <section id="page-2" class="story-page">
+        <div class="story-card space-y-6">
+            <!-- Clean, Classic Flat Vector Heart -->
+            <div class="w-full flex justify-center pt-1">
+                <svg viewBox="0 0 100 90" class="w-20 sm:w-24 h-auto" aria-label="Heart">
+                    <path d="M50 82 C50 82 10 56 10 30 C10 15 22 6 35 6 C43 6 48 11 50 16 C52 11 57 6 65 6 C78 6 90 15 90 30 C90 56 50 82 50 82 Z" 
+                          fill="#f43f5e"/>
+                </svg>
+            </div>
+
+            <div class="space-y-4 px-2">
+                <p class="text-xl sm:text-2xl font-semibold text-slate-800 leading-relaxed">
+                    This was the start of our friendship...
+                </p>
+                <p class="text-lg sm:text-xl font-medium text-rose-700 leading-relaxed">
+                    The start of something beautiful and the start of something.. more amazing than there has ever been in the universe.
+                </p>
+            </div>
+
+            <div class="pt-2 w-full flex justify-center">
+                <button onclick="goToPage(3)" class="romantic-btn">
+                    Our story
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 3: EMOJI EVOLUTION & 1ST OF FEBRUARY
+         ========================================== -->
+    <section id="page-3" class="story-page">
+        <div class="story-card space-y-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                We started from this,
+            </h2>
+
+            <!-- Clean Row of Emojis -->
+            <div class="w-full py-4 px-3 rounded-2xl bg-rose-50 border border-pink-200 flex items-center justify-center space-x-1.5 sm:space-x-2 text-2xl sm:text-3xl">
+                <span>💔</span>
+                <span>❤️‍🩹</span>
+                <span>💝</span>
+                <span>🩷</span>
+                <span>💖</span>
+                <span>💓</span>
+                <span>❤️</span>
+            </div>
+
+            <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">
+                And on the 1st of February.. we became,
+            </p>
+
+            <div class="pt-2 w-full flex justify-center">
+                <button onclick="goToPage(4)" class="romantic-btn text-2xl px-10 py-3.5" aria-label="Two Hearts">
+                    💕
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 4: CLOSER THAN THE LAWS OF PHYSICS
+         ========================================== -->
+    <section id="page-4" class="story-page">
+        <div class="story-card space-y-6">
+            <p class="text-lg sm:text-xl font-semibold text-slate-800 leading-relaxed px-2 pt-2">
+                We celebrated every joy together.. every moment.. we fought because we care for each other.. we loved like no one besides each other could ever understand and we were closer than even the laws of physics would allow.
+            </p>
+
+            <div class="pt-2 w-full flex justify-center">
+                <button onclick="goToPage(5)" class="romantic-btn text-2xl px-10 py-3.5" aria-label="Kiss Emoji">
+                    😘
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 5: THE SURPRISE FOR DAWN
+         ========================================== -->
+    <section id="page-5" class="story-page">
+        <div class="story-card space-y-6">
+            <div class="space-y-4 px-2 pt-2">
+                <p class="text-xl sm:text-2xl font-bold text-slate-800 leading-relaxed">
+                    I hope you loved this surprise dawn..
+                </p>
+                <p class="text-lg sm:text-xl font-medium text-rose-700 leading-relaxed">
+                    it's not a birthday surprise.. or an anniversary celebration
+                </p>
+            </div>
+
+            <div class="pt-2 w-full flex justify-center">
+                <button onclick="goToPage(6)" class="romantic-btn">
+                    What is it
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 6: TRIBUTE TO DAWN, DRU & RUBY
+         ========================================== -->
+    <section id="page-6" class="story-page">
+        <div class="story-card space-y-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-rose-700">
+                It is a tribute to,
+            </h2>
+
+            <!-- Vibrant 🌈 Emoji-Colored Striped Rainbow Heart with Text Inside -->
+            <div class="relative w-full flex justify-center items-center my-1">
+                <svg viewBox="0 0 260 230" class="w-60 sm:w-64 h-auto drop-shadow-md" aria-label="Rainbow Heart">
+                    <defs>
+                        <clipPath id="rainbowHeartClip">
+                            <path d="M130 215 C130 215 15 145 15 72 C15 34 45 12 78 12 C102 12 120 25 130 42 C140 25 158 12 182 12 C215 12 245 34 245 72 C245 145 130 215 130 215 Z"/>
+                        </clipPath>
+                    </defs>
+
+                    <!-- 6 Crisp Vibrant Rainbow Bands (🌈 Emoji Palette) Clipped to Heart -->
+                    <g clip-path="url(#rainbowHeartClip)">
+                        <rect x="0" y="10"  width="260" height="35" fill="#FF2E2E"/>
+                        <rect x="0" y="45"  width="260" height="34" fill="#FF8A00"/>
+                        <rect x="0" y="79"  width="260" height="34" fill="#FFD600"/>
+                        <rect x="0" y="113" width="260" height="34" fill="#1CD149"/>
+                        <rect x="0" y="147" width="260" height="34" fill="#0088FF"/>
+                        <rect x="0" y="181" width="260" height="40" fill="#8A2BE2"/>
+                    </g>
+
+                    <!-- Clean White Heart Border -->
+                    <path d="M130 215 C130 215 15 145 15 72 C15 34 45 12 78 12 C102 12 120 25 130 42 C140 25 158 12 182 12 C215 12 245 34 245 72 C245 145 130 215 130 215 Z" 
+                          fill="none" 
+                          stroke="#ffffff" 
+                          stroke-width="5" 
+                          stroke-linejoin="round"/>
+                </svg>
+
+                <!-- Text Clearly Readable Overlaid on the Rainbow Heart -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center px-6 pb-4 pointer-events-none">
+                    <div class="bg-black/35 backdrop-blur-[2px] px-4 py-2 rounded-2xl text-white shadow-sm">
+                        <div class="font-romantic text-3xl sm:text-4xl font-bold leading-tight drop-shadow">
+                            Dawn and Dru,
+                        </div>
+                        <div class="text-xs sm:text-sm font-bold tracking-wider uppercase mt-0.5 drop-shadow">
+                            Always and forever
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Below the Heart -->
+            <div class="w-full flex justify-center">
+                <button onclick="goToPage(7)" class="romantic-btn text-base sm:text-lg px-7 py-3">
+                    Beyond the laws of physics
+                </button>
+            </div>
+
+            <!-- Ruby Tribute Text Below the Button -->
+            <div class="pt-1 px-3 py-2.5 rounded-2xl bg-rose-50 border border-rose-200">
+                <p class="text-sm sm:text-base font-bold text-rose-800 leading-snug">
+                    With.. a third heart.. who is now part of our family.. ruby 💓🥹❤️
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         PAGE 7: FINAL CELEBRATION & CONFETTI
+         ========================================== -->
+    <section id="page-7" class="story-page">
+        <div class="story-card space-y-5 border-rose-300">
+            <!-- Clean, Classic Flat Vector Heart with Gentle Pulse -->
+            <div class="w-full flex justify-center pt-1 animate-final-heart">
+                <svg viewBox="0 0 100 90" class="w-20 sm:w-24 h-auto" aria-label="Heart">
+                    <path d="M50 82 C50 82 10 56 10 30 C10 15 22 6 35 6 C43 6 48 11 50 16 C52 11 57 6 65 6 C78 6 90 15 90 30 C90 56 50 82 50 82 Z" 
+                          fill="#e11d48"/>
+                </svg>
+            </div>
+
+            <p class="text-lg sm:text-xl font-semibold text-slate-800 leading-relaxed px-2">
+                I love you, and everything you are.. the way you make my life shine.. and how you make my world.. infinitely better
+            </p>
+
+            <!-- Highlighted Celebratory Banner -->
+            <div class="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 text-white shadow-md">
+                <h1 class="font-romantic text-3xl sm:text-4xl font-bold leading-tight">
+                    Happy friendship anniversary Praju..
+                </h1>
+            </div>
+
+            <!-- Replay Control -->
+            <div class="pt-1 flex items-center justify-center w-full">
+                <button onclick="goToPage(1)" class="px-5 py-2 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs sm:text-sm transition active:scale-95">
+                    ↺ Replay
+                </button>
+            </div>
+        </div>
+    </section>
+
     <script>
-        // Wait for the DOM to be fully loaded before running script
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Elements ---
-            const appWindow = document.getElementById('app');
-            const desktopIcon = document.getElementById('desktopIcon');
-            const closeBtn = document.getElementById('closeBtn');
-            const loginBtn = document.getElementById('loginBtn');
-            
-            const screenLogin = document.getElementById('screen-login');
-            const screenQuestion = document.getElementById('screen-question');
-            const iconStage = document.getElementById('iconStage');
-            
-            // Buttons for slides
-            const btnYes = document.getElementById('btnYes');
-            const btnWhat = document.getElementById('btnWhat');
-            const btnAccept = document.getElementById('btnAccept');
-            const btnYay = document.getElementById('btnYay');
+        let currentPage = 1;
+        const totalPages = 7;
 
-            // Slides
-            const slides = {
-                1: document.getElementById('slide1'),
-                2: document.getElementById('slide2'),
-                3: document.getElementById('slide3'),
-                4: document.getElementById('slide4')
-            };
+        function goToPage(targetPage) {
+            if (targetPage < 1 || targetPage > totalPages) return;
 
-            // --- Event Listeners ---
-            
-            // Open App
-            desktopIcon.addEventListener('click', () => {
-                appWindow.classList.add('open');
-            });
+            const oldPageEl = document.getElementById(`page-${currentPage}`);
+            const newPageEl = document.getElementById(`page-${targetPage}`);
 
-            // Close App
-            closeBtn.addEventListener('click', () => {
-                appWindow.classList.remove('open');
+            if (oldPageEl && oldPageEl !== newPageEl) {
+                oldPageEl.classList.remove('active');
+                oldPageEl.classList.add('exit-up');
                 setTimeout(() => {
-                    location.reload(); 
+                    oldPageEl.classList.remove('exit-up');
                 }, 500);
-            });
-
-            // Login
-            loginBtn.addEventListener('click', () => {
-                screenLogin.classList.add('fade-out');
-                setTimeout(() => {
-                    screenLogin.style.display = 'none';
-                    screenQuestion.style.display = 'flex'; 
-                }, 500);
-            });
-
-            // Sequence Buttons
-            btnYes.addEventListener('click', acceptValentine);
-            btnWhat.addEventListener('click', showStapler);
-            btnAccept.addEventListener('click', showCalendar);
-            btnYay.addEventListener('click', finishApp);
-
-
-            // --- Logic Functions ---
-
-            // Helper for Slideshow Transition
-            function transitionSlide(currentId, nextId) {
-                const currentSlide = slides[currentId];
-                const nextSlide = slides[nextId];
-
-                // Move current to left
-                currentSlide.classList.remove('active');
-                currentSlide.classList.add('prev');
-
-                // Move next in from right
-                nextSlide.classList.add('active');
-                
-                setTimeout(() => {
-                    currentSlide.classList.remove('prev');
-                }, 600);
             }
 
-            // Step 1: Clicked "YES"
-            function acceptValentine() {
-                iconStage.classList.add('healed');
+            if (newPageEl) {
+                newPageEl.classList.add('active');
+            }
+
+            // Update background gradient theme
+            document.body.className = `bg-theme-${targetPage}`;
+            currentPage = targetPage;
+
+            // Start continuous falling confetti only on the Final Page
+            if (targetPage === 7) {
                 startConfetti();
-                transitionSlide(1, 2);
+            } else {
+                stopConfetti();
             }
+        }
 
-            // Step 2: Clicked "what?" -> Show Stapler
-            function showStapler() {
-                iconStage.classList.add('show-stapler');
-                transitionSlide(2, 3);
-            }
-
-            // Step 3: Clicked "accept" -> Show Calendar
-            function showCalendar() {
-                iconStage.classList.add('show-calendar');
-                transitionSlide(3, 4);
-            }
-
-            // Step 4: Clicked "yay!"
-            function finishApp() {
-                btnYay.style.transform = "scale(1.2)";
-                setTimeout(() => {
-                    btnYay.style.transform = "scale(1)";
-                    startConfetti();
-                }, 200);
-            }
-
-            // --- Confetti Engine ---
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            let confettiActive = false;
-            let isSpawning = false;
-            let particles = [];
-            let animationId;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = -10;
-                    this.size = Math.random() * 10 + 5;
-                    this.speedY = Math.random() * 3 + 2;
-                    this.speedX = Math.random() * 4 - 2;
-                    this.color = ['#ff4757', '#2ed573', '#eccc68', '#70a1ff', '#ff6b81'][Math.floor(Math.random() * 5)];
-                    this.rotation = Math.random() * 360;
-                    this.rotationSpeed = Math.random() * 10 - 5;
-                }
-                update() {
-                    this.y += this.speedY;
-                    this.x += this.speedX;
-                    this.rotation += this.rotationSpeed;
-                }
-                draw() {
-                    ctx.save();
-                    ctx.translate(this.x, this.y);
-                    ctx.rotate(this.rotation * Math.PI / 180);
-                    ctx.fillStyle = this.color;
-                    ctx.fillRect(0, 0, this.size, this.size);
-                    ctx.restore();
-                }
-            }
-
-            function startConfetti() {
-                if(confettiActive && isSpawning) return;
-                
-                confettiActive = true;
-                isSpawning = true;
-                
-                if (particles.length === 0) {
-                    loop();
-                }
-                
-                setTimeout(() => {
-                    isSpawning = false;
-                }, 2000);
-            }
-
-            function loop() {
-                if (!confettiActive && particles.length === 0) return;
-                
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                if (isSpawning && particles.length < 150) {
-                    particles.push(new Particle());
-                }
-
-                for (let i = 0; i < particles.length; i++) {
-                    particles[i].update();
-                    particles[i].draw();
-
-                    if (particles[i].y > canvas.height) {
-                        particles.splice(i, 1);
-                        i--;
-                    }
-                }
-                
-                if (particles.length > 0 || isSpawning) {
-                    animationId = requestAnimationFrame(loop);
-                } else {
-                    confettiActive = false;
-                }
-            }
-        });
-    </script>
-</body>
-</html>
-
-
+        /* ==========================================
+           CONFETTI ENGINE (FINAL PAGE ONLY)
+           ========================================== */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiPieces = [];
+        let
